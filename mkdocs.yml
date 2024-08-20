@@ -4,9 +4,9 @@ site_description: |
 site_author: FAIRmat consortium
 nav:
   - Overview: index.md
-  - Part 1 - Intro to NOMAD: intro.md
-  - Part 2 - NOMAD-Simulations: nomad_simulations.md
-  - Part 3 - Parser Plugins: parser_plugins.md
+  - NOMAD-Simulations: nomad_simulations.md
+  - Parser Plugins: parser_plugins.md
+  - Extending the Schema: schema_plugins.md
 theme:
   name: material
   palette:

@@ -1,4 +1,4 @@
-# Part 2 - Working with the NOMAD-Simulations schema plugin
+# Working with the NOMAD-Simulations schema plugin
 
 In NOMAD, all the simulation metadata is defined under the `Simulation` section. You can find its Python schema defined in the [`nomad-simulations`](https://github.com/nomad-coe/nomad-simulations/) repository. The [entry point](parser_plugins.md) for the schema is defined in [src/nomad_simulations/schema_packages/\_\_init\_\_.py](https://github.com/nomad-coe/nomad-simulations/blob/develop/src/nomad_simulations/schema_packages/__init__.py) module. This section will appear under the `data` section for each NOMAD [*entry*](https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#entry). There is also a [specialized documentation page](https://nomad-coe.github.io/nomad-simulations/) in the `nomad-simulations` repository.
 
@@ -7,7 +7,7 @@ The `Simulation` section inherits from a more abstract section or concept called
 ??? note "Inheritance and composition"
     During this part, we will identify the **is a** concept with inheritance of one section into another (e.g., a `Simulation` _is an_ `Activity`) and the **has a** concept with composition of one section under another (e.g., a `Simulation` **has a** `ModelSystem` sub-section). Strictly speaking, this equivalency is not entirely true, as we are loosing it in some cases. But for the purpose of learning the complicated rules of inheritance and composition, we will conceptually maintain this equivalency during this Tutorial.
 
-A set of [base sections](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/base_sections.html) derived from the [Basic Formal Ontology (BFO)](https://basic-formal-ontology.org/) is used as the basis for our section definitions. The previous inheritance allows us to define `Simulation` at the same level of other activities in Materials Science, e.g., `Experiment`, `Measurement`, `Analysis`. We do this in order to achieve a common vocabulary and data standardization with the experimental community. The relationship tree from the most abstract sections upon reaching `Simulation` is thus:
+A set of [base sections](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/base_sections.html) derived from the [Basic Formal Ontology (BFO)](https://basic-formal-ontology.org/) is used as the basis for our section definitions. The previous inheritance allows us to define `Simulation` at the same level of other activities in Materials Science, e.g., `Experiment`, `Measurement`, `Analysis`. We do this in order to achieve a common vocabulary and data standardization with the experimental community. Using inheritance of a given section, any user can [_extend_](schema_plugins.md) the initial purpose of a NOMAD section and use it to store their specific data. The relationship tree from the most abstract sections upon reaching `Simulation` is thus:
 
 <div class="click-zoom">
     <label>
@@ -28,7 +28,25 @@ Note that the white-headed arrow here indicates _inheritance_ / _is a_ relations
 
 We use double inheritance from `EntryData` in order to populate the `data` section in the NOMAD archive. All of the base sections discussed here are subject to the [public normalize function](#normalize-function) in NOMAD. The private function `set_system_branch_depth()` is related with the [ModelSystem section](#modelsystem).
 
-Let's use this knowledge to see how to work with the schema in practice. If you have not already installed `nomad-simulations`, do so now following the instructions in the [Overview](index.md#tutorial-information-and-preparation).
+
+## Initial steps
+
+Let's use this knowledge to see how to work with the schema in practice. In order to do that, we need to install the `nomad-simulations` package. First, create the directory and the virtual environment in the terminal. You can use Python 3.9, 3.10, or 3.11:
+
+```sh
+mkdir test_nomadsimulations
+cd test_nomadsimulations/
+python3.11 -m venv .pyenv
+source .pyenv/bin/activate
+```
+
+Once this is done, install the `nomad-simulations` package:
+```sh
+pip install --upgrade pip
+pip install nomad-simulations 
+```
+
+
 
 !!! abstract "Assignment 2.1"
     Create an instance of the `Simulation` section. Imagine you know that the CPU1 took 24 minutes and 30 seconds on finishing the simulation; can you populate the `Simulation` section with these times? What is the elapsed time in seconds? And in hours?
@@ -77,8 +95,8 @@ The `Simulation` section is composed of 4 main sub-sections:
 !!! note "Self-consistent steps, SinglePoint entries, and more complex workflows."
     The minimal unit for storing data in the NOMAD archive is an [*entry*](https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#entry). In the context of simulation data, an entry may contain data from a calculation on an individual system configuration (e.g., a single-point DFT calculation) using **only** the above-mentioned sections of the `Simulation` section. Information from self-consistent iterations to converge properties for this configuration are also contained within these sections.
 
-    More complex calculations that involve multiple configurations require the definition of a *workflow* section within the archive. Depending on the situation, the information from individual workflow steps may be stored within a single or multiple entries. For example, for efficiency, the data from workflows involving a large amount of configurations, e.g., molecular dynamics trajectories, are stored within a single entry. Other standard workflows store the single-point data in separate entries, e.g.,  a `GW` calculation is composed of a `DFT SinglePoint` entry and a `GW SinglePoint` entry. Higher-level workflows, which simply connect a series of standard or custom workflows, are typically stored as a separate entry. See [Part V - Custom Workflows](custom_workflows.md) for more information.
-<!--Mention here Part V?-->
+    More complex calculations that involve multiple configurations require the definition of a *workflow* section within the archive. Depending on the situation, the information from individual workflow steps may be stored within a single or multiple entries. For example, for efficiency, the data from workflows involving a large amount of configurations, e.g., molecular dynamics trajectories, are stored within a single entry. Other standard workflows store the single-point data in separate entries, e.g.,  a `GW` calculation is composed of a `DFT SinglePoint` entry and a `GW SinglePoint` entry. Higher-level workflows, which simply connect a series of standard or custom workflows, are typically stored as a separate entry. See [Tutorial 14: Part V - Custom Workflows](https://fairmat-nfdi.github.io/fairmat-tutorial-14-computational-plugins/custom_workflows/) for more information.
+
 
 The following schematic represents a simplified representation of the `Simulation` section (note that the arrows here are a simple way of visually defining _inputs_ and _outputs_):
 
@@ -131,7 +149,7 @@ Note that the rhombo-headed arrow here indicates a _composition_ / _has a_ relat
 
 ## `ModelMethod` {#modelmethod}
 
-The `ModelMethod` section is an input section which contains all the information about the mathematical model used to perform the simulation. In NOMAD, we can extend the support of certain methods by inheriting from `ModelMethod` and extend the schema for the new methodology. `ModelMethod` also contains a specialized sub-section called [`NumericalSettings`](#numericalsettings). The detailed relationship tree is:
+The `ModelMethod` section is an input section which contains all the information about the mathematical model used to perform the simulation. In NOMAD, we can extend the support of certain methods by inheriting from `ModelMethod` and [extending the schema for the new methodology](schema_plugins.md). `ModelMethod` also contains a specialized sub-section called [`NumericalSettings`](#numericalsettings). The detailed relationship tree is:
 
 <div class="click-zoom">
     <label>
@@ -143,7 +161,7 @@ The `ModelMethod` section is an input section which contains all the information
 `ModelMethod` is thus a sub-section under `Simulation`. It inherits from an abstract section `BaseModelMethod`, as well as containing a sub-section called `contributions` of the same section. The underlying idea of `ModelMethod` is to parse the input parameters of the mathematical model, typically a Hamiltonian. This total Hamiltonian or model could be split into individual sub-terms or `contributions`. Each of the electronic-structure methodologies inherit from `ModelMethodElectronic`, which contains a boolean `is_spin_polarized` indicating if the `Simulation` is spin polarized or not. The different levels of abstractions are useful when dealing with commonalities amongst the methods.
 
 !!! abstract "Assignment 2.3"
-    Instantiate a `DFT` section. For simplicity, you can also assign the `jacobs_ladder` quantity to be `'LDA'`. Add this sub-section to the `Simulation` section created in the Assignment 2.1. What is the underlying concept that allows you to add directly the `class DFT` under `Simulation.model_method`, provided that the definition of this attribute is a `ModelMethod` sub-section? Can you reason why the current schema (version 0.0.2) is inconsistent in handling the `xc_functionals` contributions?
+    Instantiate a `DFT` section. For simplicity, you can also assign the `jacobs_ladder` quantity to be `'LDA'`. Add this sub-section to the `Simulation` section created in the Assignment 2.1. What is the underlying concept that allows you to add directly the `class DFT` under `Simulation.model_method`, provided that the definition of this attribute is a `ModelMethod` sub-section? Can you reason why the version 0.0.2 of the `nomad-simulations` schema is inconsistent in handling the `xc_functionals` contributions?
 
 ??? success "Solution 2.3"
     Similarly to Assignment 2.2, we can import and create the `DFT` section:
@@ -194,7 +212,7 @@ The `NumericalSettings` section is an abstract section used to define the numeri
     [SelfConsistency:SelfConsistency(name, threshold_change, threshold_change_unit)]
     ```
 
-    In order to go from `scf` to the `dft.jacobs_ladder` information, we need to go one level up with respect to `scf`. In order to do this, we can use the method `m_parent`:
+    In order to go from `scf` to the `dft.jacobs_ladder` information, we need to go one level up with respect to `scf`. In order to do this, we can use the property `m_parent`:
     ```python
     scf.m_parent.jacobs_ladder
     ```
@@ -221,7 +239,7 @@ The detailed relationship tree is:
 The `Entity` abstract section is defined in the [Basic Formal Ontology (BFO)](https://basic-formal-ontology.org/) similar to `Activity`, and we use it to abstract our `ModelSystem`. In fact, `ModelSystem` is inheriting from an intermediate abstract section called `System`. This base section, `System`, is also used by the experimental data models to define the composition and structure of the measured materials.
 
 ??? note "GeometricSpace and simulated cells."
-    The abstract section `GeometricSpace` is used to define more general real space quantities related with the system of reference used, areas, lengths, volumes, etc. However, this section and `Cell` are currently (version 0.0.2) under revision and will probably change in the near future.
+    The abstract section `GeometricSpace` is used to define more general real space quantities related with the system of reference used, areas, lengths, volumes, etc. However, this section and `Cell` are currently (version 0.0.3) under revision and will probably change in the near future.
 
 
 ### `AtomsState` and other sub-sections {#atomsstate}
@@ -367,7 +385,7 @@ The detailed relationship tree is:
     ```python
     scf.threshold_change = 1e-24
     ```
-    And re-run the `resolve_is_scf_converged()` method, we can see that the `FermiLevel` is not self-consistenly converged:
+    And re-run the `resolve_is_scf_converged()` line from above, we can see that the `FermiLevel` is not self-consistenly converged:
     ```sh
     False
     ```
@@ -481,3 +499,4 @@ In case we do not assign a value to `Section1.normalizer_level` and `Section2.no
 3. `ParentSection.normalize()`
 
 By checking on the `normalize()` functions and **rule 3**, we can establish whether `ArchiveSection.normalize()` will be run or not. In `Section1.normalize()`, it will not, while in the other sections, `Section2` and `ParentSection`, it will.
+
