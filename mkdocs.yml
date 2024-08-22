@@ -6,7 +6,7 @@ nav:
   - Overview: index.md
   - NOMAD-Simulations: nomad_simulations.md
   - Parser Plugins: parser_plugins.md
-  - Extending the Schema: schema_plugins.md
+  - Extending the Schema: extending_schema.md
 theme:
   name: material
   palette:

@@ -4,13 +4,11 @@ This documentation page will provide foundational knowledge for creating parser 
 
 ## Hackathon information
 
-The FAIRmat Hackathon - FAIR Data Management of Spectroscopic Simulations, presented by FAIRmat Area C Computation, will take place from Wednesday, September 4, 2024 to Friday September 6, 2024. Check your email for the link if you have already registered, or register at the [Event Page](https://events.fairmat-nfdi.eu/event/25/){:target="_blank"}
-
-To help facilitate discussions and provide prolonged assistance beyond the tutorial, we have created a [Hackathon FAIR spectra Sep2024 event channel](https://discord.gg/qgpHtPZwkt) in the NOMAD Discord server.
+To help facilitate discussions and provide prolonged assistance beyond the tutorial, we have created a [#hackathon-fairspectra-sep2024](https://discord.gg/qgpHtPZwkt) event channel in the NOMAD Discord server.
 
 The structure of this documentation page is divided in two parts:
 
-1. Understanding the [NOMAD-Simulations schema](nomad_simulations.md), what are its strengths and weaknesses, as well as learning how to extend it.
+1. Understanding the [NOMAD-Simulations schema](nomad_simulations.md), what are its strengths and weaknesses, as well as learning [how to extend it](extending_schema.md).
 2. [How to create a parser plugin](parser_plugins.md), importing the data schema from the NOMAD-Simulations package and matching the files to be parsed.
 
 You can find Assignments throughout these documentation pages which will help you understand the main concepts.
