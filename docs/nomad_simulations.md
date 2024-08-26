@@ -46,6 +46,14 @@ pip install --upgrade pip
 pip install nomad-simulations 
 ```
 
+??? warning "Version installation issue"
+    If you are having versioning problems when doing `pip install nomad-simulations`, we recommend you to try:
+    ```sh
+    pip install nomad-simulations --index-url https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple
+    ```
+    
+    The flag `--index-url` points to an internal package registry for installing the NOMAD package within the `nomad-simulations` one. If the problem persists, feel free to contact us.
+
 
 
 !!! abstract "Assignment 2.1"

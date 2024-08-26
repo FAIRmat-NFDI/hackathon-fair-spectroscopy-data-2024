@@ -23,10 +23,10 @@ From this schematic, we can identify 3 distinct uses or extensions of `nomad-sim
 
 You can find more information about writing schemas packages in [How to write a schema package](https://nomad-lab.eu/prod/v1/docs/howto/plugins/schema_packages.html) in the NOMAD documentation.
 
-In order to extend the `nomad-simulations` schema, as it will be done throughout the example in this page, [add the schema packages when generating the plugin template](parser_plugins.md/#start-plugin). This will create a sub-folder `src/<parser_name>/schema_packages` and a Python file `mypackage.py` in your parser plugin project.
+In order to extend the `nomad-simulations` schema, [add the schema packages when generating the plugin template](parser_plugins.md/#start-plugin). This will create a sub-folder `src/<parser_name>/schema_packages` and a Python file `schema_package.py` in your parser plugin project.
 
 
-In this page, we will learn about extending the current `nomad-simulations` schema, and more specifically, the [`AtomsState`](nomad_simulations.md/#atomsstate) information. We will use the same `PySCF` example, `glycine.log`, as in [Parser Plugins](parser_plugins.md). In that mainfile, we are interested on parsing the simulation cell information for each atom, i.e., we are interested on storing the `AtomicCell` and its `AtomsState`. This information appears in `glycine.log` as:
+In this page, we will learn about extending the current `nomad-simulations` schema, and more specifically, the [`AtomsState`](nomad_simulations.md/#atomsstate) information. We will use the same `PySCF` example, `glycine.log`, as in [Parser Plugins](parser_plugins.md). In that mainfile, we are interested on parsing the simulation cell information for each atom, i.e., we are interested on storing the geometrical state information in `AtomicCell` and in `AtomsState`. This information appears in `glycine.log` as:
 ```txt
 ...
 [INPUT] Symbol           X                Y                Z      unit          X                Y                Z       unit  Magmom
@@ -150,7 +150,7 @@ class PySCFParser(MatchingParser):
         atomic_cell.positions = positions * ureg(position_unit[atom[-2]])
 ```
 
-Note that we have to map the strings in the `glycine.log` file to a format accepted by [Pint](https://pint.readthedocs.io/en/stable/). This already stores all the information of each atom, except for the magnetic moment. For the version `0.0.4` of the `nomad-simulations` package, there is no `Quantity` defined in `AtomsState` to store the magnetic moment of each atom. Thus, the solution here would be to follow the diagram above:
+Note that we have to map the strings in the `glycine.log` file to a format accepted by [Pint](https://pint.readthedocs.io/en/stable/). This already stores all the information of each atom, except for the magnetic moment. For the version `0.0.5` of the `nomad-simulations` package, there is no `Quantity` defined in `AtomsState` to store the magnetic moment of each atom. Thus, the solution here would be to follow the diagram above:
 
 <div class="click-zoom">
     <label>
@@ -159,7 +159,7 @@ Note that we have to map the strings in the `glycine.log` file to a format accep
     </label>
 </div>
 
-And realize that we need to extend `AtomsState` defining a new `Quantity`, `magnetic_moment`. In order to do this, we go to `src/nomad_parser_pyscf/schema_packages/mypackage.py` and change the content to:
+And realize that we need to extend `AtomsState` defining a new `Quantity`, `magnetic_moment`. In order to do this, we go to `src/nomad_parser_pyscf/schema_packages/schema_package.py` and change the content to:
 ```python
 from nomad.config import config
 from nomad.metainfo import Quantity, SchemaPackage
@@ -169,7 +169,7 @@ import numpy as np
 
 
 configuration = config.get_plugin_entry_point(
-    'nomad_parser_pyscf.schema_packages:mypackage'
+    'nomad_parser_pyscf.schema_packages:schema_package_entry_point'
 )
 
 m_package = SchemaPackage()
@@ -195,7 +195,7 @@ Note that we defined a new class, so in the parser we need to import this instea
 from nomad.units import ureg
 from nomad_simulations.schema_packages.model_system import ModelSystem, AtomicCell
 
-from nomad_parser_pyscf.schema_packages.mypackage import ExtendedAtomsState
+from nomad_parser_pyscf.schema_packages.schema_package import ExtendedAtomsState
 
 # `configuration` and `LogParser` defined here
 
@@ -234,6 +234,7 @@ class PySCFParser(MatchingParser):
             try:
                 atom_state = ExtendedAtomsState(
                     chemical_symbol=atom[0],
+                    magnetic_moment=atom[-1] * ureg('bohr_magneton')
                 )
                 atomic_cell.atoms_state.append(atom_state)
                 position_unit = {

@@ -39,7 +39,7 @@ You can decide where to host the parser plugin. Once this is done, in your local
 git clone https://github.com/JosePizarro3/example-plugin.git
 ```
 
-All the steps we are going to do can be found in the branch `pyscf-new`.
+All the steps we are going to do can be found in the branch `pyscf-new-template`.
 
 Go to the `example-plugin` directory and create a virtual environment with Python 3.9, 3.10, or 3.11, and activate it:
 ```sh
@@ -59,10 +59,10 @@ You will be prompted with some questions and information regarding the plugin. M
 ```sh
   [1/13] full_name (John Doe): <whatever-name>
   [2/13] email (john.doe@physik.hu-berlin.de): <whatever-email> 
-  [3/13] github_username (foo): <whatever-github-username>
-  [4/13] plugin_name (foobar): parser-pyscf    
+  [3/13] github_username (Github organization or profile name, default: foo): <whatever-github-name>
+  [4/13] plugin_name (foobar): nomad-parser-pyscf    
   [5/13] module_name (recommended: press enter to use the default module name) 
-(parser_pyscf):     
+(nomad_parser_pyscf):     
   [6/13] short_description (Nomad example template): NOMAD parser plugin for PySCF simulations output in a log text file. 
   [7/13] version (0.1.0): 
   [8/13] Select license
@@ -94,10 +94,10 @@ example-plugin/
 │       ├── __init__.py
 │       ├── parsers/
 │       │   ├── __init__.py
-│       │   └── myparser.py
+│       │   └── parser.py
 │       └── schema_packages/
 │           ├── __init__.py
-│           └── mypackage.py
+│           └── schema_package.py
 ├── tests/
 │   ├── conftest.py
 │   ├── data/
@@ -106,7 +106,7 @@ example-plugin/
 │   ├── parsers/
 │   │   └── test_parser.py
 │   └── schema_packages/
-│       └── test_schema.py
+│       └── test_schema_package.py
 └── ... (other files)
 ```
 
@@ -130,7 +130,7 @@ class PySCFEntryPoint(ParserEntryPoint):
         return PySCFParser(**self.dict())
 
 
-pyscf_entry_point = PySCFEntryPoint(
+parser_entry_point = PySCFEntryPoint(
     name='PySCFParser',
     description='Parser for PySCF output written in a log text file.',
     mainfile_name_re='.*\.log.*',
@@ -141,12 +141,12 @@ pyscf_entry_point = PySCFEntryPoint(
 ??? tip "Matching other mainfiles"
     In the `ParserEntryPoint` class, there are several attributes that can be defined to match a file. These can be mainfile name, a regular expression (regex) at the beginning of the mainfile, binary file headers, etc. For your specific use-case, you need to identify which is the mainfile and use it to match it to your parser. You can read more of the options in the NOMAD documentation page [Reference - Configuration - ParserEntryPoint](https://nomad-lab.eu/prod/v1/staging/docs/reference/config.html#parserentrypoint).
 
-Note that we deleted the configuration parameter field (as it is not relevant for the purpose of this example) and changed some naming of files, `src/nomad_parser_pyscf/parsers/myparser.py` for `parser.py`, as well as slightly its content:
+Note that we deleted the configuration parameter field (as it is not relevant for the purpose of this example) and changed some naming of files, `src/nomad_parser_pyscf/parsers/parser.py` for `parser.py`, as well as slightly its content:
 ```python
 # all the other imports are here
 
 configuration = config.get_plugin_entry_point(
-    'nomad_parser_pyscf.parsers:pyscf_entry_point'
+    'nomad_parser_pyscf.parsers:parser_entry_point'
 )
 
 
@@ -161,13 +161,7 @@ class PySCFParser(MatchingParser):
         print('Hello world!')
 ```
 
-Note also that the entry points configuration names have to change whenever they were defined. This is the case of the `[project.entry-points.'nomad.plugin']` lines in the `pyproject.toml`:
-```toml
-[project.entry-points.'nomad.plugin']
-pyscf_entry_point = "nomad_parser_pyscf.parsers:pyscf_entry_point"
-mypackage = "nomad_parser_pyscf.schema_packages:mypackage"
-```
-
+Note that we have also changed the class imported in `tests/parsers/test_parser.py` from `NewParser` to `PySCFParser`.
 Finally, as we are going to use the `nomad-simulations` package, we need to add it into our dependencies in `pyproject.toml`:
 ```toml
 dependencies = [
@@ -219,18 +213,17 @@ PySCFParser().parse(mainfile='<path-to-mainfile>/tests/data/glycine.log', archiv
 
 ## Mapping into `nomad-simulations` {#mapping-to-nomad-simulations}
 
-Now that you know the basics of instantiating and populating the `nomad-simulations` schema (see Assignments in the [NOMAD-Simulations](nomad_simulations.md)) and the basics of setting up a parser, let's combine both concepts and populate the `nomad-simulations` schema **from the output file**. The implementation of this plugin will allow you to control and manage data in a controlled way, and you can further use it for analysis, or include these functionalities in your research workflows. You can read more details in the NOMAD documentation page [Plugins - How to write a parser](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html). 
+Now that you know the basics of instantiating and populating the `nomad-simulations` schema (see Assignments in the [NOMAD-Simulations](nomad_simulations.md)) and the basics of setting up a parser, let's combine both concepts and populate the `nomad-simulations` schema **from the output mainfile**. The implementation of this plugin will allow you to manage data in a controlled way. You can further use it for analysis tools or include these functionalities in your research workflows. You can read more details in the NOMAD documentation page [Plugins - How to write a parser](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html). 
 
-Depending on the format of the mainfile, extracting data will be different and you will need to implement the parsing slightly different. In any case, you might need to manipulate the data in order to adapt to the definitions of `nomad-simulations` (shapes, types, etc.):
+Depending on the format of the mainfile, extracting data will be different and you will need to implement the parsing slightly different. You might also need to manipulate the data in order to adapt to the definitions of `nomad-simulations` (shapes, types, etc.):
 
 - Unstructured text &ndash; You need to specify the regular expression ([regex](https://regexr.com/)) to match the text in the file in order to use it in the `parser.py` module. This is the case of our example, so you can read below how to implement it.
 - Structured formats (HDF5, JSON, XML) &ndash; You can use Python libraries to extract the data (e.g., `h5py` for HDF5 files) and map it into the `nomad-simulations` schema. In the specific case of XML, you can use the [`XMLParser`](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html#other-fileparser-classes).
 
-
-In our example, we have an unstructured text file, `glycine.log`. For simplicity, we will start with the [`Program`](nomad_simulations.md/#program) information: `name` and `version`. For unstructure text, we can use the NOMAD implementation class, `TextParser`. In this, we need to:
+In our example, we have an unstructured text file, `glycine.log`. For simplicity, we will start with the [`Program`](nomad_simulations.md/#program) information: `name` and `version`. For unstructure text, we can use the NOMAD implementation class, `TextParser`. We need to:
 
 1. Define a class inheriting from `TextParser`.
-2. Overwrite the method `init_quantities()` and define `self._quantities` as a list of `nomad.parsing.file_parser.Quantity`. Note this is a different class than the one used for defining a schema, and we will refer to it as `ParsedQuantity` from now on.
+2. Overwrite its method `init_quantities()` and define `self._quantities` as a list of `nomad.parsing.file_parser.Quantity`. Note this is a different class than the one used for defining a schema, and we will refer to it as `ParsedQuantity` from now on.
 3. `ParsedQuantity()` has a `key: value` structure and can take several arguments, being the most important ones:
     - First argument is the `key` string to identify the parsed quantity.
     - Second argument is the regex associated with that `key` to match the text.
@@ -258,7 +251,7 @@ from nomad.parsing.file_parser import Quantity as ParsedQuantity, TextParser
 
 
 configuration = config.get_plugin_entry_point(
-    'nomad_parser_pyscf.parsers:pyscf_entry_point'
+    'nomad_parser_pyscf.parsers:parser_entry_point'
 )
 
 
@@ -271,7 +264,7 @@ class LogParser(TextParser):
         ]
 ```
 
-Note we defined `LogParser()` and its `self._quantities` to match the `version` of the PySCF run. The `name` will be anyways set up to be `PySCF` during parsing.
+Note we defined `LogParser()` and its `self._quantities` to match the `version` of the PySCF run. The `name` will be anyways set up to be `'PySCF'` during parsing.
 
 If the regex matches, then this should return the value appearing after the string `'PySCF version'`, i.e., `'2.2.1'`. We can test this by:
 ```python
@@ -321,11 +314,11 @@ class PySCFParser(MatchingParser):
         archive.data = simulation
 ```
 
-Now, this populated schema can be output adding a `print` statement with the path to the section adding:
+Now, this populated schema can be output adding a `print` statement with the path to the section or quantity, after `archive.data` is assigned in the parser:
 ```python
         print(archive.data.program.name, archive.data.program.version)
 ```
-after `archive.data` is assigned in the parser. Or we can use the flag `--show-archive` when running the `nomad parse` command to print the archive in the terminal:
+Or we can use the flag `--show-archive` when running the `nomad parse` command to print the archive in the terminal:
 ```sh
 nomad parse --show-archive tests/data/glycine.log
 ```
@@ -339,6 +332,6 @@ And we obtain:
       "version": "2.2.1"
     }
   },
-  # other sections here
+  # other metadata here
 }
 ```

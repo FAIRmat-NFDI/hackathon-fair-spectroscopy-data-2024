@@ -4,21 +4,21 @@ This documentation page will provide foundational knowledge for creating parser 
 
 ## Hackathon information
 
-To help facilitate discussions and provide prolonged assistance beyond the tutorial, we have created a [#hackathon-fairspectra-sep2024](https://discord.gg/qgpHtPZwkt) event channel in the NOMAD Discord server.
-
-The structure of this documentation page is divided in two parts:
+The structure of this documentation page is as follows:
 
 1. Understanding the [NOMAD-Simulations schema](nomad_simulations.md), what are its strengths and weaknesses, as well as learning [how to extend it](extending_schema.md).
 2. [How to create a parser plugin](parser_plugins.md), importing the data schema from the NOMAD-Simulations package and matching the files to be parsed.
 
 You can find Assignments throughout these documentation pages which will help you understand the main concepts.
 
+To help facilitate discussions and provide prolonged assistance beyond the tutorial, we have created a [#hackathon-fairspectra-sep2024](https://discord.gg/qgpHtPZwkt) event channel in the NOMAD Discord server.
+
 
 ## General background
 
 [NOMAD](https://nomad-lab.eu/nomad-lab/){:target="_blank"} is an open-source, community-driven data infrastructure, focusing on materials science data. Originally built as a repository for data from DFT calculations, the NOMAD software can automatically extract data from the output of a large variety of simulation codes. 
 
-The key advantages of the NOMAD schema are summed up in **FAIR**mat's core values:
+The key advantages of the NOMAD-Simulations schema are summed up in **FAIR**mat's core values:
 
 - **F**indable: a wide selection of the extracted data is indexed in a database, powering a the search with highly customizable queries and modular search parameters.
 - **A**ccessible: the same database specifies clear API and GUI protocols on how retrieve the _full_ data extracted.
