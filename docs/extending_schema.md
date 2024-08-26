@@ -135,9 +135,8 @@ class PySCFParser(MatchingParser):
         positions = []
         for atom in atoms_information:
             try:
-                atom_state = ExtendedAtomsState(
+                atom_state = AtomsState(
                     chemical_symbol=atom[0],
-                    magnetic_moment=atom[-1] * ureg('bohr_magneton'),
                 )
                 atomic_cell.atoms_state.append(atom_state)
                 position_unit = {
