@@ -1,6 +1,6 @@
-site_name: FAIRmat Hackathon - FAIR Data Management of Spectroscopic Simulations
+site_name: FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
 site_description: |
-  Developing parsers for FAIR computational data storage of spectroscopic simulations using the NOMAD-Simulations package
+  Developing parsers for FAIR computational data storage of spectroscopy simulations using the NOMAD-Simulations package
 site_author: FAIRmat consortium
 nav:
   - Overview: index.md

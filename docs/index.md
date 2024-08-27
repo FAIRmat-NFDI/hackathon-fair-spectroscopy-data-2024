@@ -1,6 +1,6 @@
-# Developing parsers for FAIR computational data storage of spectroscopic simulations using the NOMAD-Simulations package
+# Developing parsers for FAIR computational data storage of spectroscopy simulations using the NOMAD-Simulations package
 
-This documentation page will provide foundational knowledge for creating parser plugins in NOMAD to manage computational data of spectroscopic simulations. We will use the [`nomad-simulations`](https://pypi.org/project/nomad-simulations/) package to populate our data schema and extend it when needed. The steps are more general and can be used to create _any_ parser plugin, but in here we will use examples specifically related with theoretical spectroscopy simulations.
+This documentation page will provide foundational knowledge for creating parser plugins in NOMAD to manage computational data of spectroscopy simulations. We will use the [`nomad-simulations`](https://pypi.org/project/nomad-simulations/) package to populate our data schema and extend it when needed. The steps are more general and can be used to create _any_ parser plugin, but in here we will use examples specifically related with theoretical spectroscopy simulations.
 
 ## Hackathon information
 

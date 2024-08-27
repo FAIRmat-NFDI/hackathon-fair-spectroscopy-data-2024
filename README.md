@@ -1,5 +1,5 @@
-# FAIRmat Hackathon - FAIR Data Management of Spectroscopic Simulations
-Basic documentation for the FAIR Data Management of Spectroscopic Simulations in September 2024.
+# FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
+Basic documentation for the FAIR Data Management of Spectroscopy Simulations in September 2024.
 
 ### How to launch locally for debugging
 
