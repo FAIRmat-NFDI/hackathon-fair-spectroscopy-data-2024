@@ -1,0 +1,822 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Developing parsers for FAIR computational data storage of spectroscopy simulations using the NOMAD-Simulations package
+">
+      
+      
+        <meta name="author" content="FAIRmat consortium">
+      
+      
+      
+        <link rel="prev" href="../nomad_simulations/">
+      
+      
+        <link rel="next" href="../extending_schema/">
+      
+      
+      <link rel="icon" href="../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.33">
+    
+    
+      
+        <title>Parser Plugins - FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.3cba04c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Titillium Web";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#creating-parser-plugins" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" class="md-header__button md-logo" aria-label="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" data-md-component="logo">
+      
+  <img src="../assets/nomad-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Parser Plugins
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" class="md-nav__button md-logo" aria-label="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" data-md-component="logo">
+      
+  <img src="../assets/nomad-logo.png" alt="logo">
+
+    </a>
+    FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nomad_simulations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NOMAD-Simulations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Parser Plugins
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Parser Plugins
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Starting a plugin project
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matching-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matching the files to a parser
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-to-nomad-simulations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping into nomad-simulations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extending_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the Schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Starting a plugin project
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matching-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matching the files to a parser
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapping-to-nomad-simulations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping into nomad-simulations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="creating-parser-plugins">Creating parser plugins<a class="headerlink" href="#creating-parser-plugins" title="Permanent link">&para;</a></h1>
+<p>The role of a parser is to map between a structure or unstructure file into a well-defined, standardized, and (ideally) FAIR data schema. In our case, we are interested on mapping simulation data into the <a href="../nomad_simulations/"><code>nomad-simulations</code> schema</a>. When the sections defined in <code>nomad-simulations</code> are not enough, any user can extend and tune the schema to their specific needs, see <a href="../extending_schema/">Extending the schema</a>.</p>
+<p>In NOMAD, when an user <a href="https://nomad-lab.eu/prod/v1/staging/docs/examples/computational_data/uploading.html">creates an upload and push some files</a>, a processing occurs. This processing involves several steps, being <strong>matching</strong> and <strong>parsing</strong> the most important and relevant ones:</p>
+<ol>
+<li><a href="#matching-parser"><em>Matching the file(s)</em></a> to the relevant parser class called <code>&lt;ParserName&gt;Parser</code>. Only a specific file is matched with the parser class, which receives the name of <a href="https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#mainfile"><em>mainfile</em></a>. </li>
+<li>Call into the <code>&lt;ParserName&gt;Parser</code> class function <code>parse()</code>. </li>
+<li>The <code>parse()</code> function populates the <a href="https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#archive"><em>archive</em></a> from the mainfile and other <em>auxiliary</em> files which might be relevant. This archive contains of the relevant metadata in a NOMAD <a href="https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#entry"><em>entry</em></a>.</li>
+</ol>
+<p>You can find more information about processing the NOMAD documentation page, see <a href="https://nomad-lab.eu/prod/v1/staging/docs/explanation/processing.html#processing-scenarios">Explanation - Processing</a>. Schematically, this processing can be visualized as:</p>
+<div class="click-zoom">
+    <label>
+        <input type="checkbox">
+        <img src="../assets/parsing_illustration.png" alt="Symbolic, 3-step representation of the parsing process: 1. SELECT FILES; 2. EXTRACT DATA;  3. SCHEMA" width="80%" title="Click to zoom in">
+    </label>
+</div>
+
+<p>In this page, we are going to learn how to create a parser, its structure and basic functionalities. NOMAD parsers are <a href="https://en.wikipedia.org/wiki/Plug-in_(computing)">plugins</a>, and thus can be defined in their own repositories and be developed independently of the main software. In case of administrating a NOMAD Oasis, you can read more about connecting plugins in the NOMAD documentation, see <a href="https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html">NOMAD Oasis - Install plugins</a>.</p>
+<h2 id="start-plugin">Starting a plugin project<a class="headerlink" href="#start-plugin" title="Permanent link">&para;</a></h2>
+<p>To create your own parser plugin, visit the <a href="https://github.com/FAIRmat-NFDI/nomad-plugin-template">NOMAD plugin template</a> and click the “Use this template” button (you need a Github account to do so):</p>
+<div class="click-zoom">
+    <label>
+        <input type="checkbox">
+        <img src="../assets/github_plugin_template.png" alt="Overview of the nomad-plugin-template repository." width="80%" title="Click to zoom in">
+    </label>
+</div>
+
+<p>You can decide where to host the parser plugin. Once this is done, in your local machine you can clone the generated repository. For the purpose of this example, we will use <a href="https://github.com/JosePizarro3/example-plugin">JosePizarro3/example-plugin</a>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JosePizarro3/example-plugin.git
+</code></pre></div></p>
+<p>All the steps we are going to do can be found in the branch <code>pyscf-new-template</code>.</p>
+<p>Go to the <code>example-plugin</code> directory and create a virtual environment with Python 3.9, 3.10, or 3.11, and activate it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span>example-plugin
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python3.11<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.pyenv
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>.<span class="w"> </span>.pyenv/bin/activate
+</code></pre></div></p>
+<p>Install <code>uv</code> (a very fast installer of Python packages) and <code>cruft</code>, and follow the instructions in the <code>README.md</code> to generate the parser:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>uv<span class="w"> </span>cruft
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cruft<span class="w"> </span>create<span class="w"> </span>https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin
+</code></pre></div></p>
+<p>You will be prompted with some questions and information regarding the plugin. Make sure to include both <code>parser</code> and <code>schema_package</code> options (the latter will be use in the <a href="../extending_schema/">Extending the Schema</a> part):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">  </span><span class="o">[</span><span class="m">1</span>/13<span class="o">]</span><span class="w"> </span>full_name<span class="w"> </span><span class="o">(</span>John<span class="w"> </span>Doe<span class="o">)</span>:<span class="w"> </span>&lt;whatever-name&gt;
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="o">[</span><span class="m">2</span>/13<span class="o">]</span><span class="w"> </span>email<span class="w"> </span><span class="o">(</span>john.doe@physik.hu-berlin.de<span class="o">)</span>:<span class="w"> </span>&lt;whatever-email&gt;<span class="w"> </span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="o">[</span><span class="m">3</span>/13<span class="o">]</span><span class="w"> </span>github_username<span class="w"> </span><span class="o">(</span>Github<span class="w"> </span>organization<span class="w"> </span>or<span class="w"> </span>profile<span class="w"> </span>name,<span class="w"> </span>default:<span class="w"> </span>foo<span class="o">)</span>:<span class="w"> </span>&lt;whatever-github-name&gt;
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="o">[</span><span class="m">4</span>/13<span class="o">]</span><span class="w"> </span>plugin_name<span class="w"> </span><span class="o">(</span>foobar<span class="o">)</span>:<span class="w"> </span>nomad-parser-pyscf<span class="w">    </span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="o">[</span><span class="m">5</span>/13<span class="o">]</span><span class="w"> </span>module_name<span class="w"> </span><span class="o">(</span>recommended:<span class="w"> </span>press<span class="w"> </span>enter<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>module<span class="w"> </span>name<span class="o">)</span><span class="w"> </span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="o">(</span>nomad_parser_pyscf<span class="o">)</span>:<span class="w">     </span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="o">[</span><span class="m">6</span>/13<span class="o">]</span><span class="w"> </span>short_description<span class="w"> </span><span class="o">(</span>Nomad<span class="w"> </span>example<span class="w"> </span>template<span class="o">)</span>:<span class="w"> </span>NOMAD<span class="w"> </span>parser<span class="w"> </span>plugin<span class="w"> </span><span class="k">for</span><span class="w"> </span>PySCF<span class="w"> </span>simulations<span class="w"> </span>output<span class="w"> </span><span class="k">in</span><span class="w"> </span>a<span class="w"> </span>log<span class="w"> </span>text<span class="w"> </span>file.<span class="w"> </span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="o">[</span><span class="m">7</span>/13<span class="o">]</span><span class="w"> </span>version<span class="w"> </span><span class="o">(</span><span class="m">0</span>.1.0<span class="o">)</span>:<span class="w"> </span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="o">[</span><span class="m">8</span>/13<span class="o">]</span><span class="w"> </span>Select<span class="w"> </span>license
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="m">1</span><span class="w"> </span>-<span class="w"> </span>MIT
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="m">2</span><span class="w"> </span>-<span class="w"> </span>BSD-3
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="m">3</span><span class="w"> </span>-<span class="w"> </span>GNU<span class="w"> </span>GPL<span class="w"> </span>v3.0+
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="m">4</span><span class="w"> </span>-<span class="w"> </span>Apache<span class="w"> </span>Software<span class="w"> </span>License<span class="w"> </span><span class="m">2</span>.0
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span>Choose<span class="w"> </span>from<span class="w"> </span><span class="o">[</span><span class="m">1</span>/2/3/4<span class="o">]</span><span class="w"> </span><span class="o">(</span><span class="m">1</span><span class="o">)</span>:<span class="w"> </span>&lt;whatever-license&gt;
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="o">[</span><span class="m">9</span>/13<span class="o">]</span><span class="w"> </span>include_schema_package<span class="w"> </span><span class="o">[</span>y/n<span class="o">]</span><span class="w"> </span><span class="o">(</span>y<span class="o">)</span>:<span class="w"> </span>y
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="o">[</span><span class="m">10</span>/13<span class="o">]</span><span class="w"> </span>include_normalizer<span class="w"> </span><span class="o">[</span>y/n<span class="o">]</span><span class="w"> </span><span class="o">(</span>y<span class="o">)</span>:<span class="w"> </span>n
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="o">[</span><span class="m">11</span>/13<span class="o">]</span><span class="w"> </span>include_parser<span class="w"> </span><span class="o">[</span>y/n<span class="o">]</span><span class="w"> </span><span class="o">(</span>y<span class="o">)</span>:<span class="w"> </span>y
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="o">[</span><span class="m">12</span>/13<span class="o">]</span><span class="w"> </span>include_app<span class="w"> </span><span class="o">[</span>y/n<span class="o">]</span><span class="w"> </span><span class="o">(</span>y<span class="o">)</span>:<span class="w"> </span>n
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span><span class="o">[</span><span class="m">13</span>/13<span class="o">]</span><span class="w"> </span>include_example_uploads<span class="w"> </span><span class="o">[</span>y/n<span class="o">]</span><span class="w"> </span><span class="o">(</span>y<span class="o">)</span>:<span class="w"> </span>n
+</code></pre></div></p>
+<p>You can use the script under the generated folder to move all files one level up:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sh<span class="w"> </span>nomad-parser-pyscf/move_template_files.sh
+</code></pre></div></p>
+<p>The structure of the plugin is (without including the <code>docs</code> and <code>mkdocs.yml</code> files):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>example-plugin/
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├──<span class="w"> </span>README.md
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├──<span class="w"> </span>LICENSE
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├──<span class="w"> </span>pyproject.toml
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>├──<span class="w"> </span>src/
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│<span class="w">   </span>└──<span class="w"> </span>nomad_parser_pyscf/
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│<span class="w">       </span>├──<span class="w"> </span>__init__.py
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│<span class="w">       </span>├──<span class="w"> </span>parsers/
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│<span class="w">       </span>│<span class="w">   </span>├──<span class="w"> </span>__init__.py
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>│<span class="w">       </span>│<span class="w">   </span>└──<span class="w"> </span>parser.py
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>│<span class="w">       </span>└──<span class="w"> </span>schema_packages/
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>│<span class="w">           </span>├──<span class="w"> </span>__init__.py
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>│<span class="w">           </span>└──<span class="w"> </span>schema_package.py
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>├──<span class="w"> </span>tests/
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>│<span class="w">   </span>├──<span class="w"> </span>conftest.py
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>│<span class="w">   </span>├──<span class="w"> </span>data/
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>example.out
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>test.archive.yaml
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>│<span class="w">   </span>├──<span class="w"> </span>parsers/
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>test_parser.py
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>│<span class="w">   </span>└──<span class="w"> </span>schema_packages/
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>│<span class="w">       </span>└──<span class="w"> </span>test_schema_package.py
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>└──<span class="w"> </span>...<span class="w"> </span><span class="o">(</span>other<span class="w"> </span>files<span class="o">)</span>
+</code></pre></div></p>
+<p>You can read more about plugins in the NOMAD documentation page, see <a href="https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/plugins.html">How to get started with plugins</a>. The <a href="https://nomad-lab.eu/prod/v1/staging/docs/reference/glossary.html#plugin-entry-point"><em>entry point</em></a> for a parser plugin is defined in <code>src/nomad_parser_pyscf/parsers/__init__.py</code> file.</p>
+<h2 id="matching-parser">Matching the files to a parser<a class="headerlink" href="#matching-parser" title="Permanent link">&para;</a></h2>
+<p>We are going to consider an example file generated by the software <a href="https://pyscf.org/">PySCF</a> (<a href="https://box.hu-berlin.de/f/6d369b46a7084a118e63/">click here for download</a>), and use it to parse data into the <code>nomad-simulations</code> schema. If you want to learn more about extending the <code>nomad-simulations</code> schema when the information is not defined, see <a href="../extending_schema/">Extending the Schema</a>.</p>
+<p>In the template, go to the entry point in <code>src/nomad_parser_pyscf/parsers/__init__.py</code> and change the content to:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span> <span class="nn">nomad.config.models.plugins</span> <span class="kn">import</span> <span class="n">ParserEntryPoint</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">class</span> <span class="nc">PySCFEntryPoint</span><span class="p">(</span><span class="n">ParserEntryPoint</span><span class="p">):</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="kn">from</span> <span class="nn">nomad_parser_pyscf.parsers.parser</span> <span class="kn">import</span> <span class="n">PySCFParser</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        <span class="k">return</span> <span class="n">PySCFParser</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">parser_entry_point</span> <span class="o">=</span> <span class="n">PySCFEntryPoint</span><span class="p">(</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PySCFParser&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Parser for PySCF output written in a log text file.&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">mainfile_name_re</span><span class="o">=</span><span class="s1">&#39;.*\.log.*&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="n">mainfile_contents_re</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;PySCF version [\d\.]*&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="p">)</span>
+</code></pre></div></p>
+<details class="tip">
+<summary>Matching other mainfiles</summary>
+<p>In the <code>ParserEntryPoint</code> class, there are several attributes that can be defined to match a file. These can be mainfile name, a regular expression (regex) at the beginning of the mainfile, binary file headers, etc. For your specific use-case, you need to identify which is the mainfile and use it to match it to your parser. You can read more of the options in the NOMAD documentation page <a href="https://nomad-lab.eu/prod/v1/staging/docs/reference/config.html#parserentrypoint">Reference - Configuration - ParserEntryPoint</a>.</p>
+</details>
+<p>Note that we deleted the configuration parameter field (as it is not relevant for the purpose of this example) and changed some naming of files, <code>src/nomad_parser_pyscf/parsers/parser.py</code> for <code>parser.py</code>, as well as slightly its content:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># all the other imports are here</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">configuration</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_plugin_entry_point</span><span class="p">(</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="s1">&#39;nomad_parser_pyscf.parsers:parser_entry_point&#39;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hello world!&#39;</span><span class="p">)</span>
+</code></pre></div></p>
+<p>Note that we have also changed the class imported in <code>tests/parsers/test_parser.py</code> from <code>NewParser</code> to <code>PySCFParser</code>.
+Finally, as we are going to use the <code>nomad-simulations</code> package, we need to add it into our dependencies in <code>pyproject.toml</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="s2">&quot;nomad-lab&gt;=1.3.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="s2">&quot;nomad-simulations&gt;=0.0.3&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">]</span>
+</code></pre></div></p>
+<p>In order to test the parser, we can install parser plugin in editable mode (with the flag <code>-e</code>):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[dev]&#39;</span><span class="w"> </span>--index-url<span class="w"> </span>https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple
+</code></pre></div></p>
+<details class="note">
+<summary>Installing nomad-lab</summary>
+<p>Until we have an official pypi NOMAD release with the plugins functionality make sure to include NOMAD's internal package registry (via <code>--index-url</code> in the above command). Alternatively, you can add the following lines to the <code>pyproject.toml</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[tool.uv]</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">index-url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple&quot;</span>
+</code></pre></div>
+And install the package with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[dev]&#39;</span>
+</code></pre></div></p>
+</details>
+<p>With these changes, you can parse the <code>glycine.log</code> file and show the archive in the terminal (note we put the <code>glycine.log</code> file in the <code>tests/data/</code> sub-folder):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>nomad<span class="w"> </span>parse<span class="w"> </span>tests/data/glycine.log
+</code></pre></div></p>
+<p>If everything went well, you should see a message run by the <code>PySCFParser().parse()</code> function:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Hello<span class="w"> </span>world!
+</code></pre></div></p>
+<p>In Python (in a module, Jupyter notebook, or in the interactive terminal), you can test the parsing by importing <code>PySCFParser</code> and specifying the path to the file. Note we also need to instantiate an empty <code>EntryArchive</code> in order to pass it as an input of the <code>parse()</code> function:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span> <span class="nn">nomad.datamodel</span> <span class="kn">import</span> <span class="n">EntryArchive</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span> <span class="nn">nomad_parser_pyscf.parsers.parser</span> <span class="kn">import</span> <span class="n">PySCFParser</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">archive</span> <span class="o">=</span> <span class="n">EntryArchive</span><span class="p">()</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">PySCFParser</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="s1">&#39;&lt;path-to-mainfile&gt;/tests/data/glycine.log&#39;</span><span class="p">,</span> <span class="n">archive</span><span class="o">=</span><span class="n">archive</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Other operations / analyses here</span>
+</code></pre></div></p>
+<h2 id="mapping-to-nomad-simulations">Mapping into <code>nomad-simulations</code><a class="headerlink" href="#mapping-to-nomad-simulations" title="Permanent link">&para;</a></h2>
+<p>Now that you know the basics of instantiating and populating the <code>nomad-simulations</code> schema (see Assignments in the <a href="../nomad_simulations/">NOMAD-Simulations</a>) and the basics of setting up a parser, let's combine both concepts and populate the <code>nomad-simulations</code> schema <strong>from the output mainfile</strong>. The implementation of this plugin will allow you to manage data in a controlled way. You can further use it for analysis tools or include these functionalities in your research workflows. You can read more details in the NOMAD documentation page <a href="https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html">Plugins - How to write a parser</a>. </p>
+<p>Depending on the format of the mainfile, extracting data will be different and you will need to implement the parsing slightly different. You might also need to manipulate the data in order to adapt to the definitions of <code>nomad-simulations</code> (shapes, types, etc.):</p>
+<ul>
+<li>Unstructured text &ndash; You need to specify the regular expression (<a href="https://regexr.com/">regex</a>) to match the text in the file in order to use it in the <code>parser.py</code> module. This is the case of our example, so you can read below how to implement it.</li>
+<li>Structured formats (HDF5, JSON, XML) &ndash; You can use Python libraries to extract the data (e.g., <code>h5py</code> for HDF5 files) and map it into the <code>nomad-simulations</code> schema. In the specific case of XML, you can use the <a href="https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html#other-fileparser-classes"><code>XMLParser</code></a>.</li>
+</ul>
+<p>In our example, we have an unstructured text file, <code>glycine.log</code>. For simplicity, we will start with the <a href="../nomad_simulations/#program"><code>Program</code></a> information: <code>name</code> and <code>version</code>. For unstructure text, we can use the NOMAD implementation class, <code>TextParser</code>. We need to:</p>
+<ol>
+<li>Define a class inheriting from <code>TextParser</code>.</li>
+<li>Overwrite its method <code>init_quantities()</code> and define <code>self._quantities</code> as a list of <code>nomad.parsing.file_parser.Quantity</code>. Note this is a different class than the one used for defining a schema, and we will refer to it as <code>ParsedQuantity</code> from now on.</li>
+<li><code>ParsedQuantity()</code> has a <code>key: value</code> structure and can take several arguments, being the most important ones:<ul>
+<li>First argument is the <code>key</code> string to identify the parsed quantity.</li>
+<li>Second argument is the regex associated with that <code>key</code> to match the text.</li>
+<li><code>repeats</code> is a boolean used to repeat multiple times. If <code>repeats=True</code> and the regex matches, it returns a list. Otherwise it returns nothing or a singular value.</li>
+</ul>
+</li>
+<li>Instantiate the class of point 1 in the <code>parse()</code> function and define the path to its mainfile.</li>
+</ol>
+<p>We can implement these steps in <code>src/nomad_parser_pyscf/parsers/parser.py</code>. First, we add these lines before <code>PySCFParser(MatchingParser)</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">)</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="kn">from</span> <span class="nn">nomad.datamodel.datamodel</span> <span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        <span class="n">EntryArchive</span><span class="p">,</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>    <span class="p">)</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="kn">from</span> <span class="nn">structlog.stdlib</span> <span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>        <span class="n">BoundLogger</span><span class="p">,</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="p">)</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="kn">from</span> <span class="nn">nomad.config</span> <span class="kn">import</span> <span class="n">config</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="kn">from</span> <span class="nn">nomad.parsing.parser</span> <span class="kn">import</span> <span class="n">MatchingParser</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="kn">from</span> <span class="nn">nomad.parsing.file_parser</span> <span class="kn">import</span> <span class="n">Quantity</span> <span class="k">as</span> <span class="n">ParsedQuantity</span><span class="p">,</span> <span class="n">TextParser</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="n">configuration</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_plugin_entry_point</span><span class="p">(</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>    <span class="s1">&#39;nomad_parser_pyscf.parsers:parser_entry_point&#39;</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="p">)</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="k">class</span> <span class="nc">LogParser</span><span class="p">(</span><span class="n">TextParser</span><span class="p">):</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>    <span class="k">def</span> <span class="nf">init_quantities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_quantities</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a>            <span class="n">ParsedQuantity</span><span class="p">(</span>
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a>                <span class="s1">&#39;program_version&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;PySCF *version *([\d\.]+)&#39;</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="kc">False</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a>            <span class="p">)</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a>        <span class="p">]</span>
+</code></pre></div></p>
+<p>Note we defined <code>LogParser()</code> and its <code>self._quantities</code> to match the <code>version</code> of the PySCF run. The <code>name</code> will be anyways set up to be <code>'PySCF'</code> during parsing.</p>
+<p>If the regex matches, then this should return the value appearing after the string <code>'PySCF version'</code>, i.e., <code>'2.2.1'</code>. We can test this by:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>        <span class="n">log_parser</span> <span class="o">=</span> <span class="n">LogParser</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="n">mainfile</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_version&#39;</span><span class="p">))</span>
+</code></pre></div></p>
+<p>If we run now <code>nomad parse tests/data/glycine.log</code> we obtain:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>2.2.1
+</code></pre></div></p>
+<p>Now, we can instantiate <code>Simulation</code> and <code>Program</code> sections, and add them to the <code>archive</code>. This can be done by:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># other imports here</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span> <span class="nn">nomad_simulations.schema_packages.general</span> <span class="kn">import</span> <span class="n">Simulation</span><span class="p">,</span> <span class="n">Program</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># `configuration` and `LogParser` defined here</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>        <span class="n">log_parser</span> <span class="o">=</span> <span class="n">LogParser</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="n">mainfile</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>        <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">()</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>        <span class="n">program</span> <span class="o">=</span> <span class="n">Program</span><span class="p">(</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PySCF&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_version&#39;</span><span class="p">)</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>        <span class="p">)</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">program</span> <span class="o">=</span> <span class="n">program</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>        <span class="c1"># Add the `Simulation` activity to the `archive`</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>        <span class="n">archive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">simulation</span>
+</code></pre></div></p>
+<p>Now, this populated schema can be output adding a <code>print</code> statement with the path to the section or quantity, after <code>archive.data</code> is assigned in the parser:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">archive</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">program</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">archive</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">program</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+</code></pre></div>
+Or we can use the flag <code>--show-archive</code> when running the <code>nomad parse</code> command to print the archive in the terminal:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>nomad<span class="w"> </span>parse<span class="w"> </span>--show-archive<span class="w"> </span>tests/data/glycine.log
+</code></pre></div>
+And we obtain:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="o">{</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="s2">&quot;data&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="s2">&quot;m_def&quot;</span>:<span class="w"> </span><span class="s2">&quot;nomad_simulations.schema_packages.general.Simulation&quot;</span>,
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="s2">&quot;program&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">      </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;PySCF&quot;</span>,
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">      </span><span class="s2">&quot;version&quot;</span>:<span class="w"> </span><span class="s2">&quot;2.2.1&quot;</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="o">}</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">  </span><span class="o">}</span>,
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">  </span><span class="c1"># other metadata here</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="o">}</span>
+</code></pre></div></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../nomad_simulations/" class="md-footer__link md-footer__link--prev" aria-label="Previous: NOMAD-Simulations">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                NOMAD-Simulations
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../extending_schema/" class="md-footer__link md-footer__link--next" aria-label="Next: Extending the Schema">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Extending the Schema
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.footer"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 0.1}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.af256bd8.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+      
+        <script src="https://unpkg.com/cytoscape@3.19.1/dist/cytoscape.min.js"></script>
+      
+        <script src="../assets/custom.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,664 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Developing parsers for FAIR computational data storage of spectroscopy simulations using the NOMAD-Simulations package
+">
+      
+      
+        <meta name="author" content="FAIRmat consortium">
+      
+      
+      
+        <link rel="prev" href="../parser_plugins/">
+      
+      
+      
+      <link rel="icon" href="../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.33">
+    
+    
+      
+        <title>Extending the Schema - FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.3cba04c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Titillium Web";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#extending-the-nomad-simulations-schema" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" class="md-header__button md-logo" aria-label="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" data-md-component="logo">
+      
+  <img src="../assets/nomad-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Extending the Schema
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" class="md-nav__button md-logo" aria-label="FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations" data-md-component="logo">
+      
+  <img src="../assets/nomad-logo.png" alt="logo">
+
+    </a>
+    FAIRmat Hackathon - FAIR Data Management of Spectroscopy Simulations
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nomad_simulations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NOMAD-Simulations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser_plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parser Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Extending the Schema
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="extending-the-nomad-simulations-schema">Extending the NOMAD-Simulations schema<a class="headerlink" href="#extending-the-nomad-simulations-schema" title="Permanent link">&para;</a></h1>
+<p>As you develop your parser, you may find that the <code>nomad-simulations</code> package does not include some relevant quantities for your particular use case. You can easily extend upon the schema by adding your own custom schema under the <code>schema_packages/</code> directory in your parser plugin. For this, you should utilize and build upon <code>nomad-simulations</code> for consistency and future compatibility or integration. Below is a decision tree which illustrates the schema development process:</p>
+<div class="click-zoom">
+    <label>
+        <input type="checkbox">
+        <img src="../assets/decision_tree.png" alt="Schema extension decision tree." width="80%" title="Click to zoom in">
+    </label>
+</div>
+
+<p>From this schematic, we can identify 3 distinct uses or extensions of <code>nomad-simulations</code>:</p>
+<ol>
+<li>Direct use of existing section definitions (without extension):<ul>
+<li>See how to use them in <a href="../parser_plugins/">Parser Plugins</a>.</li>
+</ul>
+</li>
+<li>Semantic extension of section definitions:<ul>
+<li>Create sections that re-define the context through inheritance from existing sections. Quantities definitions within the inherited section can be overwritten.</li>
+<li>Create brand new sections.</li>
+</ul>
+</li>
+<li>Extending section definitions for normalization functionalities:<ul>
+<li>The section normalization functions (see <a href="../nomad_simulations/#normalize-function">Extra: The <code>normalize()</code> class function</a>) can be overwritten to leverage certain tasks out of the parsers.</li>
+</ul>
+</li>
+</ol>
+<p>You can find more information about writing schemas packages in <a href="https://nomad-lab.eu/prod/v1/docs/howto/plugins/schema_packages.html">How to write a schema package</a> in the NOMAD documentation.</p>
+<p>In order to extend the <code>nomad-simulations</code> schema, <a href="../parser_plugins/#start-plugin">add the schema packages when generating the plugin template</a>. This will create a sub-folder <code>src/&lt;parser_name&gt;/schema_packages</code> and a Python file <code>schema_package.py</code> in your parser plugin project.</p>
+<p>In this page, we will learn about extending the current <code>nomad-simulations</code> schema, and more specifically, the <a href="../nomad_simulations/#atomsstate"><code>AtomsState</code></a> information. We will use the same <code>PySCF</code> example, <code>glycine.log</code>, as in <a href="../parser_plugins/">Parser Plugins</a>. In that mainfile, we are interested on parsing the simulation cell information for each atom, i.e., we are interested on storing the geometrical state information in <code>AtomicCell</code> and in <code>AtomsState</code>. This information appears in <code>glycine.log</code> as:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>...
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>[INPUT] Symbol           X                Y                Z      unit          X                Y                Z       unit  Magmom
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>[INPUT]  1 O      0.000000000000   0.000000000000   0.117790000000 AA    0.000000000000   0.000000000000   0.222590840213 Bohr   0.0
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>[INPUT]  2 H      0.000000000000   0.755453000000  -0.471161000000 AA    0.000000000000   1.427599269981  -0.890365250576 Bohr   0.0
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>[INPUT]  3 H      0.000000000000  -0.755453000000  -0.471161000000 AA    0.000000000000  -1.427599269981  -0.890365250576 Bohr   0.0
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>...
+</code></pre></div></p>
+<p>Here we have to consider that:</p>
+<ol>
+<li>we only need to parse one of the units positions,</li>
+<li>we only need to pass the symbols and the <code>AtomsState.normalize()</code> function will take care of extracting the atomic number of the chemical elements, and</li>
+<li>the atomic magnetic moment (<code>Magmom</code> colum) is not defined in <code>AtomsState</code>, so <strong>we have to extend the schema</strong>. Note that even if they are 0.0, it is a good idea to implement the extraction now and the parsing will work for any finite atomic magnetic moment.</li>
+</ol>
+<p>For capturing and returning this information, and as each element is a repeating line, we need to add a <code>repeats=True</code> condition into the <code>ParsedQuantity</code>. Our new <code>LogParser</code> will then be:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span> <span class="nc">LogParser</span><span class="p">(</span><span class="n">TextParser</span><span class="p">):</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span> <span class="nf">init_quantities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_quantities</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            <span class="n">ParsedQuantity</span><span class="p">(</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                <span class="s1">&#39;program_version&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;PySCF *version *([\d\.]+)&#39;</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="kc">False</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>            <span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            <span class="n">ParsedQuantity</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                <span class="s1">&#39;atoms_information&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>                <span class="sa">r</span><span class="s1">&#39;\[INPUT\] *\d *([a-zA-Z])+ *([\d\.\-]+) *([\d\.\-]+) *([\d\.\-]+) *([a-zA-Z]+)[\d\.\-\s]*[a-zA-Z]* *([\d\.\-]+)&#39;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>                <span class="n">repeats</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            <span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="p">]</span>
+</code></pre></div></p>
+<p>We have added a new <code>ParsedQuantity</code> for the atoms information: chemical element string, the three positions in cartesian coordinates, the unit of the positions, and the value of the magnetic moment. This regex returns a list of lists, in which each element of the list refers to each chemical and their position in the simulated cell. We need to manipulate the data slightly to store the information in a proper format that the schema understands. In order to do things clear, we are going to define in our <code>PySCFParser()</code> class the following variables:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        <span class="n">log_parser</span> <span class="o">=</span> <span class="n">LogParser</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="n">mainfile</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">()</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="n">program</span> <span class="o">=</span> <span class="n">Program</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PySCF&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_version&#39;</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">program</span> <span class="o">=</span> <span class="n">program</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        <span class="c1"># Add the `Simulation` activity to the `archive`</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="n">archive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">simulation</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        <span class="c1"># Match the atoms information</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        <span class="n">atoms_information</span> <span class="o">=</span> <span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;atoms_information&#39;</span><span class="p">,</span> <span class="p">[])</span>
+</code></pre></div></p>
+<p>Now, we want to:</p>
+<ol>
+<li>Import <code>ModelSystem</code>, <code>AtomicCell</code>, and <code>AtomsState</code>.</li>
+<li>Instantiate <code>ModelSystem</code> and append it to <code>simulation</code>.</li>
+<li>Instantiate <code>AtomicCell</code> and append it to <code>ModelSystem</code>.</li>
+<li>Instantiate <code>AtomsState</code> for each atom, populate these sections with the information, and append them to <code>AtomicCell</code>.</li>
+</ol>
+<p>This can be done importing  the <code>atoms_information</code> matched list as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># other imports here</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">nomad.units</span> <span class="kn">import</span> <span class="n">ureg</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">nomad_simulations.schema_packages.model_system</span> <span class="kn">import</span> <span class="n">ModelSystem</span><span class="p">,</span> <span class="n">AtomicCell</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span> <span class="nn">nomad_simulations.schema_packages.atoms_state</span> <span class="kn">import</span> <span class="n">AtomsState</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># `configuration` and `LogParser` defined here</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="n">log_parser</span> <span class="o">=</span> <span class="n">LogParser</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="n">mainfile</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">()</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        <span class="n">program</span> <span class="o">=</span> <span class="n">Program</span><span class="p">(</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PySCF&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_version&#39;</span><span class="p">)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>        <span class="p">)</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">program</span> <span class="o">=</span> <span class="n">program</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>        <span class="c1"># Add the `Simulation` activity to the `archive`</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>        <span class="n">archive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">simulation</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>        <span class="c1"># Match the atoms information</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>        <span class="n">atoms_information</span> <span class="o">=</span> <span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;atoms_information&#39;</span><span class="p">,</span> <span class="p">[])</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>        <span class="c1"># Instantiate `ModelSystem` and append it to `simulation`</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>        <span class="n">model_system</span> <span class="o">=</span> <span class="n">ModelSystem</span><span class="p">()</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">model_system</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_system</span><span class="p">)</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>        <span class="c1"># Instantiate `AtomicCell` and append it to `ModelSystem`</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>        <span class="n">atomic_cell</span> <span class="o">=</span> <span class="n">AtomicCell</span><span class="p">()</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a>        <span class="n">model_system</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atomic_cell</span><span class="p">)</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>        <span class="c1"># Instantiate `AtomsState` for each atom, populate these sections with the information, and append them to `AtomicCell`</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a>        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms_information</span><span class="p">:</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a>            <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a>                <span class="n">atom_state</span> <span class="o">=</span> <span class="n">AtomsState</span><span class="p">(</span>
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a>                    <span class="n">chemical_symbol</span><span class="o">=</span><span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a>                <span class="p">)</span>
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a>                <span class="n">atomic_cell</span><span class="o">.</span><span class="n">atoms_state</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_state</span><span class="p">)</span>
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a>                <span class="n">position_unit</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a>                    <span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a>                    <span class="s1">&#39;Bohr&#39;</span><span class="p">:</span> <span class="s1">&#39;bohr&#39;</span><span class="p">,</span>
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a>                <span class="p">}</span>
+<a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a>                <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a>            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Matching `atoms_information` is missing some information.&#39;</span><span class="p">)</span>
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a>        <span class="n">atomic_cell</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span> <span class="o">*</span> <span class="n">ureg</span><span class="p">(</span><span class="n">position_unit</span><span class="p">[</span><span class="n">atom</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]])</span>
+</code></pre></div>
+<p>Note that we have to map the strings in the <code>glycine.log</code> file to a format accepted by <a href="https://pint.readthedocs.io/en/stable/">Pint</a>. This already stores all the information of each atom, except for the magnetic moment. For the version <code>0.0.5</code> of the <code>nomad-simulations</code> package, there is no <code>Quantity</code> defined in <code>AtomsState</code> to store the magnetic moment of each atom. Thus, the solution here would be to follow the diagram above:</p>
+<div class="click-zoom">
+    <label>
+        <input type="checkbox">
+        <img src="../assets/decision_tree_tutorial.png" alt="Schema extension decision tree with decision path." width="80%" title="Click to zoom in">
+    </label>
+</div>
+
+<p>And realize that we need to extend <code>AtomsState</code> defining a new <code>Quantity</code>, <code>magnetic_moment</code>. In order to do this, we go to <code>src/nomad_parser_pyscf/schema_packages/schema_package.py</code> and change the content to:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">nomad.config</span> <span class="kn">import</span> <span class="n">config</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span> <span class="nn">nomad.metainfo</span> <span class="kn">import</span> <span class="n">Quantity</span><span class="p">,</span> <span class="n">SchemaPackage</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kn">import</span> <span class="nn">nomad_simulations</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">configuration</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_plugin_entry_point</span><span class="p">(</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="s1">&#39;nomad_parser_pyscf.schema_packages:schema_package_entry_point&#39;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">m_package</span> <span class="o">=</span> <span class="n">SchemaPackage</span><span class="p">()</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="k">class</span> <span class="nc">ExtendedAtomsState</span><span class="p">(</span><span class="n">nomad_simulations</span><span class="o">.</span><span class="n">schema_packages</span><span class="o">.</span><span class="n">atoms_state</span><span class="o">.</span><span class="n">AtomsState</span><span class="p">):</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="n">magnetic_moment</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>        <span class="nb">type</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>        <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;bohr_magneton&#39;</span><span class="p">,</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s2">        Magnetic moment of the atom in Bohr magneton units. This quantity is relevant only for spin-polarized calculations.</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="s2">        &quot;&quot;&quot;</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>    <span class="p">)</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="n">m_package</span><span class="o">.</span><span class="n">__init_metainfo__</span><span class="p">()</span>
+</code></pre></div></p>
+<p>Note that we defined a new class, so in the parser we need to import this instead of the <code>AtomsState</code> defined in <code>nomad-simulations</code>, as well as adding the parsing of the magnetic moment:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># other imports here</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span> <span class="nn">nomad.units</span> <span class="kn">import</span> <span class="n">ureg</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span> <span class="nn">nomad_simulations.schema_packages.model_system</span> <span class="kn">import</span> <span class="n">ModelSystem</span><span class="p">,</span> <span class="n">AtomicCell</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kn">from</span> <span class="nn">nomad_parser_pyscf.schema_packages.schema_package</span> <span class="kn">import</span> <span class="n">ExtendedAtomsState</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># `configuration` and `LogParser` defined here</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="k">class</span> <span class="nc">PySCFParser</span><span class="p">(</span><span class="n">MatchingParser</span><span class="p">):</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="n">mainfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>        <span class="n">archive</span><span class="p">:</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>        <span class="n">logger</span><span class="p">:</span> <span class="s1">&#39;BoundLogger&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>        <span class="n">child_archives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;EntryArchive&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>        <span class="n">log_parser</span> <span class="o">=</span> <span class="n">LogParser</span><span class="p">(</span><span class="n">mainfile</span><span class="o">=</span><span class="n">mainfile</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">simulation</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">()</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>        <span class="n">program</span> <span class="o">=</span> <span class="n">Program</span><span class="p">(</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;PySCF&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_version&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>        <span class="p">)</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">program</span> <span class="o">=</span> <span class="n">program</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>        <span class="c1"># Add the `Simulation` activity to the `archive`</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>        <span class="n">archive</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">simulation</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>        <span class="c1"># Match the atoms information</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>        <span class="n">atoms_information</span> <span class="o">=</span> <span class="n">log_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;atoms_information&#39;</span><span class="p">,</span> <span class="p">[])</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>        <span class="c1"># Instantiate `ModelSystem` and append it to `simulation`</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>        <span class="n">model_system</span> <span class="o">=</span> <span class="n">ModelSystem</span><span class="p">()</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>        <span class="n">simulation</span><span class="o">.</span><span class="n">model_system</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_system</span><span class="p">)</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>        <span class="c1"># Instantiate `AtomicCell` and append it to `ModelSystem`</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>        <span class="n">atomic_cell</span> <span class="o">=</span> <span class="n">AtomicCell</span><span class="p">()</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>        <span class="n">model_system</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atomic_cell</span><span class="p">)</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>        <span class="c1"># Instantiate `AtomsState` for each atom, populate these sections with the information, and append them to `AtomicCell`</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms_information</span><span class="p">:</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>            <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>                <span class="n">atom_state</span> <span class="o">=</span> <span class="n">ExtendedAtomsState</span><span class="p">(</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>                    <span class="n">chemical_symbol</span><span class="o">=</span><span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>                    <span class="n">magnetic_moment</span><span class="o">=</span><span class="n">atom</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ureg</span><span class="p">(</span><span class="s1">&#39;bohr_magneton&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>                <span class="p">)</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>                <span class="n">atomic_cell</span><span class="o">.</span><span class="n">atoms_state</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_state</span><span class="p">)</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>                <span class="n">position_unit</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>                    <span class="s1">&#39;AA&#39;</span><span class="p">:</span> <span class="s1">&#39;angstrom&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>                    <span class="s1">&#39;Bohr&#39;</span><span class="p">:</span> <span class="s1">&#39;bohr&#39;</span><span class="p">,</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>                <span class="p">}</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>                <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Matching `atoms_information` is missing some information.&#39;</span><span class="p">)</span>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a>        <span class="n">atomic_cell</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span> <span class="o">*</span> <span class="n">ureg</span><span class="p">(</span><span class="n">position_unit</span><span class="p">[</span><span class="n">atom</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]])</span>
+</code></pre></div></p>
+<p>You can print out the <code>archive</code> and its sub-sections to check that the information is properly stored.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../parser_plugins/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Parser Plugins">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Parser Plugins
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.footer"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 0.1}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.af256bd8.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+      
+        <script src="https://unpkg.com/cytoscape@3.19.1/dist/cytoscape.min.js"></script>
+      
+        <script src="../assets/custom.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
