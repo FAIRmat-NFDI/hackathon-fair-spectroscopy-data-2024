@@ -7,7 +7,7 @@ The `Simulation` section inherits from a more abstract section or concept called
 ??? note "Inheritance and composition"
     For simplicity, we will identify the **is a** concept with inheritance of one section into another (e.g., a `Simulation` _is an_ `Activity`) and the **has a** concept with composition of one section under another (e.g., a `Simulation` **has a** `ModelSystem` sub-section). Strictly speaking, this equivalency is not entirely true, as we are loosing it in some cases. But for the purpose of learning the complicated rules of inheritance and composition, we will conceptually maintain this equivalency for educational purposes.
 
-A set of [base sections](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/base_sections.html) derived from the [Basic Formal Ontology (BFO)](https://basic-formal-ontology.org/) is used as the basis for our section definitions. The previous inheritance allows us to define `Simulation` at the same level of other activities in Materials Science, e.g., `Experiment`, `Measurement`, `Analysis`. We do this in order to achieve a common vocabulary and data standardization with the experimental community. Using inheritance of a given section, any user can [extend](extending_schema.md) the initial purpose of a NOMAD section and use it to store their specific data. The relationship tree from the most abstract sections upon reaching `Simulation` is thus:
+A set of [base sections](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/base_sections.html) derived from the [Basic Formal Ontology (BFO)](https://ontobee.org/ontology/BFO) is used as the basis for our section definitions. The previous inheritance allows us to define `Simulation` at the same level of other activities in Materials Science, e.g., `Experiment`, `Measurement`, `Analysis`. We do this in order to achieve a common vocabulary and data standardization with the experimental community. Using inheritance of a given section, any user can [extend](extending_schema.md) the initial purpose of a NOMAD section and use it to store their specific data. The relationship tree from the most abstract sections upon reaching `Simulation` is thus:
 
 <div class="click-zoom">
     <label>
@@ -26,7 +26,7 @@ Note that the white-headed arrow here indicates _inheritance_ / _is a_ relations
     Thus, `cpu1_start: np.float64, s` means that there is a quantity named `'cpu1_start'` of type `numpy.float64` and whose units are `'s'` (seconds).
     We also include the existence of sub-sections by bolding the name. For example, there is a sub-section under `Simulation` named `'model_method'` whose section defintion can be found in the `ModelMethod` section. We will represent this sub-section containment in more complex UML diagrams in the future using the containment arrow (see below for the specific ase of [`Program`](#program)).
 
-We use double inheritance from `EntryData` in order to populate the `data` section in the NOMAD archive. All of the base sections discussed here are subject to the [public normalize function](#normalize-function) in NOMAD. The private function `set_system_branch_depth()` is related with the [ModelSystem section](#modelsystem).
+We use double inheritance from `EntryData` in order to populate the `data` section in the NOMAD archive. All of the base sections discussed here are subject to the [public normalize function](#normalize-function) in NOMAD. The function `set_system_branch_depth()` is related with the [ModelSystem section](#modelsystem).
 
 
 ## Initial steps
@@ -157,7 +157,7 @@ Note that the rhombo-headed arrow here indicates a _composition_ / _has a_ relat
 
 ## `ModelMethod` {#modelmethod}
 
-The `ModelMethod` section is an input section which contains all the information about the mathematical model used to perform the simulation. In NOMAD, we can extend the support of certain methods by inheriting from `ModelMethod` and [extending the schema](extending_schema.md) for the new methodology. `ModelMethod` also contains a specialized sub-section called [`NumericalSettings`](#numericalsettings). The detailed relationship tree is:
+The `ModelMethod` section is an input section which contains all the information about the mathematical model used to perform the simulation. `ModelMethod` also contains a specialized sub-section called [`NumericalSettings`](#numericalsettings). The detailed relationship tree is:
 
 <div class="click-zoom">
     <label>
@@ -233,7 +233,7 @@ The `NumericalSettings` section is an abstract section used to define the numeri
 
 The `ModelSystem` section is an input section which contains all the information about the geometrical space quantities (positions, lattice vectors, volumes, etc) of the simulated system. This section contains various quantities and sub-sections which aim to describe the system in the most complete way and in a variety of cases, from unit cells of crystals and molecules up to microstructures. In order to handle this _hierarchical_ structure, `ModelSystem` is nested over itself, i.e., a `ModelSystem` can be composed of sub-systems, which at the same time could be composed of smaller sub-systems, and so on. This is done thanks to the (proxy) sub-section attribute called `model_system`.
 
-The `Cell` sub-section is an important section which contains information of the simulated cell, including the `lattice_vectors` and the `positions` of the particles within. However, it does not contain specific information about these particles, e.g., their chemical identity or electronic state, as this is the responsability of a more specialized section, the `AtomicCell`. This section stores the relevant information about each of the atoms constituting the material via the [`AtomsState`](#atomsstate) sub-section. The `Symmetry` sub-section contains standard symmetry classifications of the system, while the `ChemicalFormula` sub-section stores various strings that allow the system to be identified in a specific format of the chemical formulas (IUPAC, Hill, etc).
+The `Cell` sub-section is an important section which contains information of the simulated cell, including the `lattice_vectors` and the `positions` of the particles within. However, it does not contain specific information about these particles, e.g., their chemical identity or electronic state, as this is the responsibility of a more specialized section, the `AtomicCell`. This section stores the relevant information about each of the atoms constituting the material via the [`AtomsState`](#atomsstate) sub-section. The `Symmetry` sub-section contains standard symmetry classifications of the system, while the `ChemicalFormula` sub-section stores various strings that allow the system to be identified in a specific format of the chemical formulas (IUPAC, Hill, etc).
 
 The detailed relationship tree is:
 
@@ -470,7 +470,7 @@ from nomad.datamodel.data import ArchiveSection
 class Section1(ArchiveSection):
     normalizer_level = 1
 
-    def normalize(self, achive, logger):
+    def normalize(self, archive, logger):
         # some operations here
         pass
 
@@ -478,18 +478,18 @@ class Section1(ArchiveSection):
 class Section2(ArchiveSection):
     normalizer_level = 0
 
-    def normalize(self, achive, logger):
+    def normalize(self, archive, logger):
         super().normalize(archive, logger)
         # Some operations here or before `super().normalize(archive, logger)`
 
 
 class ParentSection(ArchiveSection):
 
-    sub_section_1 = SubSection(Section1.m_def, repeats=False)
+    sub_section_1 = SubSection(sub_section=Section1.m_def, repeats=False)
 
-    sub_section_2 = SubSection(Section2.m_def, repeats=True)
+    sub_section_2 = SubSection(sub_section=Section2.m_def, repeats=True)
 
-    def normalize(self, achive, logger):
+    def normalize(self, archive, logger):
         super().normalize(archive, logger)
         # Some operations here or before `super().normalize(archive, logger)`
 ```
